@@ -1,0 +1,48 @@
+
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - my_network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "80:80"
+    networks:
+      - my_network
+
+  app:
+      build:
+        context: .
+        dockerfile: Dockerfile
+      container_name: my_java_app
+      environment:
+        DB_URL: jdbc:postgresql://postgres_db:5432/mydb
+        DB_USER: user
+        DB_PASSWORD: password
+      depends_on:
+        - postgres
+      networks:
+        - my_network
+
+volumes:
+  postgres_data:
+
+networks:
+  my_network:
+    driver: bridge

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    
+    <bean id="emailNotifier" class="com.example.EmailNotifier"/>
+
+    <bean id="smsNotifier" class="com.example.SmsNotifier"/>
+
+    <bean id="pushNotifier" class="com.example.PushNotifier"/>
+
+    <bean id="user1" class="com.example.User">
+        <constructor-arg value="Alice"/>
+        <constructor-arg ref="emailNotifier"/>
+    </bean>
+
+    <bean id="user2" class="com.example.User">
+        <constructor-arg value="Bob"/>
+        <constructor-arg ref="smsNotifier"/>
+    </bean>
+
+    <bean id="user3" class="com.example.User">
+        <constructor-arg value="Charlie"/>
+        <constructor-arg ref="pushNotifier"/>
+    </bean>
+    
+    <bean id="notificationService" class="com.example.NotificationService">
+        <constructor-arg>
+        <list>
+            <ref bean="user1"/>
+            <ref bean="user2"/>
+            <ref bean="user3"/>
+        </list>
+    </constructor-arg>
+    </bean>
+</beans>
